@@ -31,18 +31,22 @@ if __name__ == '__main__':
 		link = links.pop()
 		response = urllib2.urlopen(URL + link)
 		soup = BeautifulSoup(response.read())
-
-		for tag in soup.find_all('img'):
-			if tag.has_attr('src'):
-				if tag['src'].startswith('/') and (tag['src'].endswith('png') or tag['src'].endswith('svg') or tag['src'].endswith('jpg')):
-					parts = tag['src'].split('/')
-					path = 'img/' + str(imgCount) + '.' + parts[len(parts) - 1]
-					f = open(path, 'wb')
-					f.write(urllib2.urlopen(URL + tag['src']).read())
-					f.close()
-					if not FileDate.modified_recently(path, 7):
-						os.remove(path)
-						print "removed :)"
+		if 'last-modified' not in response.headers.dict or FileDate.modified(response.headers.dict['last-modified'], 30):
+			imgCount = 0
+			for tag in soup.find_all('img'):
+				if tag.has_attr('src'):
+					if tag['src'].startswith('/') and (tag['src'].endswith('png') or tag['src'].endswith('svg') or tag['src'].endswith('jpg')):
+						try:
+							parts = tag['src'].split('/')
+							path = 'img/'+ parts[len(parts) - 1]
+							if not os.path.isfile(path):
+								f = open(path, 'wb')
+								f.write(urllib2.urlopen(URL + tag['src']).read())
+								f.close()
+								imgCount += 1
+						except:
+							print "404 error?"
+			print "Page " + link + " has " + str(imgCount) + " new images!"
 
 		# Find each link in the page
 		for tag in soup.find_all('a'):
@@ -50,7 +54,7 @@ if __name__ == '__main__':
 				if tag['href'].startswith('/') and '?' not in tag['href'] and tag['href'] not in visited:
 					links.insert(0, tag['href'])
 					visited.add(tag['href'])
-					print tag['href']
+					print "Adding " + tag['href'] + " to the queue..."
 
 
 
