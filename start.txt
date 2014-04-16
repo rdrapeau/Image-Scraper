@@ -18,3 +18,9 @@
 /advertise/
 /monetize/
 /cloud/
+/cast/
+/speed/
+/places/
+/translate/
+/prediction/
+/appengine/
