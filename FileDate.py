@@ -17,3 +17,11 @@ def modified_recently(file_path, allowed_margin):
     modified_date = datetime.datetime.strptime(modified, "%a %b %d %Y").date()
 
     return today - margin <= modified_date <= today + margin
+
+
+def modified(date_modified, allowed_margin):
+    margin = datetime.timedelta(days=allowed_margin)
+    today = datetime.date.today()
+
+    modified_date = datetime.datetime.strptime(date_modified, "%a, %d %b %Y %H:%M:%S %Z").date()
+    return today - margin <= modified_date <= today + margin
