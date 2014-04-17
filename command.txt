@@ -1,0 +1,2 @@
+cat start.txt | parallel --gnu ./scrape.py {}
+pkill -9 Python
