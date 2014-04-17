@@ -8,6 +8,7 @@ import argparse
 import requests
 import urllib2
 import FileDate
+import getimageinfo
 from bs4 import BeautifulSoup
 
 URL = 'http://developer.google.com'
@@ -42,7 +43,8 @@ if __name__ == '__main__':
 								path = 'img/'+ parts[len(parts) - 1]
 								if not os.path.isfile(path):
 									f = open(path, 'wb')
-									f.write(urllib2.urlopen(URL + tag['src']).read())
+									image = urllib2.urlopen(URL + tag['src'])
+									f.write(image.read())
 									f.close()
 									imgCount += 1
 							except:
@@ -59,7 +61,4 @@ if __name__ == '__main__':
 						print "Adding " + tag['href'] + " to the queue..."
 		except:
 			continue
-
-
-
 
