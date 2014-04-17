@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """
 This is a image web scraper written in python.
 """
@@ -8,7 +9,7 @@ import urllib2
 import datetime
 from bs4 import BeautifulSoup
 
-BASE_URL = 'http://developer.google.com'
+BASE_URL = 'http://developers.google.com/'
 AGE = 30
 
 
@@ -124,8 +125,8 @@ def main():
             soup = BeautifulSoup(response.read())
             if ('last-modified' not in response.headers.dict
                     or modified(response.headers.dict['last-modified'], AGE)):
-                print "Visited: " + str(len(visited)) + " pages"
-                print "To Do: " + str(len(links)) + " pages"
+                # print "Visited: " + str(len(visited)) + " pages"
+                # print "To Do: " + str(len(links)) + " pages"
                 process_image_tags(soup)
             process_a_tags(soup, links, visited)
 
