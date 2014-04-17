@@ -29,32 +29,36 @@ if __name__ == '__main__':
 
 	while links:
 		link = links.pop()
-		response = urllib2.urlopen(URL + link)
-		soup = BeautifulSoup(response.read())
-		if 'last-modified' not in response.headers.dict or FileDate.modified(response.headers.dict['last-modified'], 30):
-			imgCount = 0
-			for tag in soup.find_all('img'):
-				if tag.has_attr('src'):
-					if tag['src'].startswith('/') and (tag['src'].endswith('png') or tag['src'].endswith('svg') or tag['src'].endswith('jpg')):
-						try:
-							parts = tag['src'].split('/')
-							path = 'img/'+ parts[len(parts) - 1]
-							if not os.path.isfile(path):
-								f = open(path, 'wb')
-								f.write(urllib2.urlopen(URL + tag['src']).read())
-								f.close()
-								imgCount += 1
-						except:
-							print "404 error?"
+		try:
+			response = urllib2.urlopen(URL + link)
+			soup = BeautifulSoup(response.read())
+			if 'last-modified' not in response.headers.dict or FileDate.modified(response.headers.dict['last-modified'], 30):
+				imgCount = 0
+				for tag in soup.find_all('img'):
+					if tag.has_attr('src'):
+						if tag['src'].startswith('/') and (tag['src'].endswith('png') or tag['src'].endswith('svg') or tag['src'].endswith('jpg')):
+							try:
+								parts = tag['src'].split('/')
+								path = 'img/'+ parts[len(parts) - 1]
+								if not os.path.isfile(path):
+									f = open(path, 'wb')
+									f.write(urllib2.urlopen(URL + tag['src']).read())
+									f.close()
+									imgCount += 1
+							except:
+									# print "404 error?"
+									continue
 			print "Page " + link + " has " + str(imgCount) + " new images!"
 
-		# Find each link in the page
-		for tag in soup.find_all('a'):
-			if tag.has_attr('href'):
-				if tag['href'].startswith('/') and '?' not in tag['href'] and tag['href'] not in visited:
-					links.insert(0, tag['href'])
-					visited.add(tag['href'])
-					print "Adding " + tag['href'] + " to the queue..."
+			# Find each link in the page
+			for tag in soup.find_all('a'):
+				if tag.has_attr('href'):
+					if tag['href'].startswith('/') and '?' not in tag['href'] and tag['href'] not in visited:
+						links.insert(0, tag['href'])
+						visited.add(tag['href'])
+						print "Adding " + tag['href'] + " to the queue..."
+		except:
+			continue
 
 
 
