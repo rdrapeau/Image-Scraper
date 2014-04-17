@@ -8,7 +8,6 @@ import argparse
 import requests
 import urllib2
 import FileDate
-import getimageinfo
 from bs4 import BeautifulSoup
 
 URL = 'http://developer.google.com'
