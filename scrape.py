@@ -79,6 +79,7 @@ def process_image_tags(soup):
         except:
             continue
 
+
 def process_a_tags(soup, links, visited):
     """
     Processes all of the a tags (links) on a page.
