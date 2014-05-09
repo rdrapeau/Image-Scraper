@@ -72,7 +72,9 @@ def process_image_tags(soup):
         try:
             if is_valid_image_tag(tag):
                 parts = tag['src'].split('/')
-                path = 'img/'+ parts[len(parts) - 1]
+                path = 'img/' + parts[len(parts) - 1]
+                if not os.path.exists('img/'):
+                    os.makedirs('img')
                 if not os.path.isfile(path): # Don't download the same image
                     image_file = open(path, 'wb')
                     image = urllib2.urlopen(BASE_URL + tag['src'])
