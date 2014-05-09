@@ -128,17 +128,10 @@ def main():
             text = response.read()
             soup = BeautifulSoup(text)
 
-            goo_links = re.findall('goo.gl\/[a-zA-Z0-9]{6}', text)
-            for goo_link in goo_links:
-                webbrowser.open('http://' + goo_link, new=2)
-
             if ('last-modified' not in response.headers.dict
                     or modified(response.headers.dict['last-modified'], AGE)):
-                # print "Visited: " + str(len(visited)) + " pages"
-                # print "To Do: " + str(len(links)) + " pages"
                 process_image_tags(soup)
             process_a_tags(soup, links, visited)
-
         except:
             continue
 
